@@ -17,6 +17,9 @@ export default [
         it: true,
         describe: true,
         before: true,
+        process: true,
+        Buffer: true,
+        expect: true,
       },
     },
     plugins: {

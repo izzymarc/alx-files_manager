@@ -13,7 +13,7 @@
 // })();
 
 // main.js
-import { isAlive, get, set } from './utils/redis';
+import { isAlive, get, set } from './utils/redis.js';
 
 (async () => {
     console.log(isAlive());

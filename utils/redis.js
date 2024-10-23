@@ -111,5 +111,9 @@ class RedisClient {
 
 // Create an instance of RedisClient
 const redisClient = new RedisClient();
-export default redisClient;
 
+// Export the methods individually
+export const isAlive = () => redisClient.isAlive();
+export const get = (key) => redisClient.get(key);
+export const set = (key, value, duration) => redisClient.set(key, value, duration);
+export const del = (key) => redisClient.del(key);

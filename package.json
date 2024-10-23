@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "lint": "npx eslint",
+    "lint": "eslint . --fix",
     "check-lint": "npx eslint controllers/ libs/ middlewares/ routes/ utils/ server.js worker.js",
     "start-server": "npx nodemon --exec babel-node --presets @babel/preset-env ./server.js",
     "start-worker": "npx nodemon --exec babel-node --presets @babel/preset-env ./worker.js",

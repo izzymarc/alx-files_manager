@@ -10,7 +10,7 @@ class RedisClient {
     });
   }
 
-  // check connection status and report
+  // check connection status & report
   isAlive() {
     if (this.client.connected) {
       return true;

@@ -8,7 +8,7 @@ import {
 import { join as joinPath } from 'path';
 import { contentType } from 'mime-types';
 import mongoDBCore from 'mongodb/lib/core';
-import dbClient from '../utils/db';
+import DbClient from '../utils/db';
 import { getUserFromXToken } from '../utils/auth';
 
 const VALID_FILE_TYPES = {
@@ -71,7 +71,7 @@ export default class FilesController {
       return;
     }
     if ((parentId !== ROOT_FOLDER_ID) && (parentId !== ROOT_FOLDER_ID.toString())) {
-      const file = await (await dbClient.filesCollection())
+      const file = await (await DbClient.filesCollection())
         .findOne({
           _id: new mongoDBCore.BSON.ObjectId(isValidId(parentId) ? parentId : NULL_ID),
         });
@@ -106,7 +106,7 @@ export default class FilesController {
       await writeFileAsync(localPath, Buffer.from(base64Data, 'base64'));
       newFile.localPath = localPath;
     }
-    const insertionInfo = await (await dbClient.filesCollection())
+    const insertionInfo = await (await DbClient.filesCollection())
       .insertOne(newFile);
     const fileId = insertionInfo.insertedId.toString();
     // start thumbnail generation worker
@@ -130,7 +130,7 @@ export default class FilesController {
     const { user } = req;
     const id = req.params ? req.params.id : NULL_ID;
     const userId = user._id.toString();
-    const file = await (await dbClient.filesCollection())
+    const file = await (await DbClient.filesCollection())
       .findOne({
         _id: new mongoDBCore.BSON.ObjectId(isValidId(id) ? id : NULL_ID),
         userId: new mongoDBCore.BSON.ObjectId(isValidId(userId) ? userId : NULL_ID),
@@ -166,7 +166,7 @@ export default class FilesController {
         : new mongoDBCore.BSON.ObjectId(isValidId(parentId) ? parentId : NULL_ID),
     };
 
-    const files = await (await (await dbClient.filesCollection())
+    const files = await (await (await DbClient.filesCollection())
       .aggregate([
         { $match: filesFilter },
         { $sort: { _id: -1 } },
@@ -197,14 +197,14 @@ export default class FilesController {
       _id: new mongoDBCore.BSON.ObjectId(isValidId(id) ? id : NULL_ID),
       userId: new mongoDBCore.BSON.ObjectId(isValidId(userId) ? userId : NULL_ID),
     };
-    const file = await (await dbClient.filesCollection())
+    const file = await (await DbClient.filesCollection())
       .findOne(fileFilter);
 
     if (!file) {
       res.status(404).json({ error: 'Not found' });
       return;
     }
-    await (await dbClient.filesCollection())
+    await (await DbClient.filesCollection())
       .updateOne(fileFilter, { $set: { isPublic: true } });
     res.status(200).json({
       id,
@@ -226,14 +226,14 @@ export default class FilesController {
       _id: new mongoDBCore.BSON.ObjectId(isValidId(id) ? id : NULL_ID),
       userId: new mongoDBCore.BSON.ObjectId(isValidId(userId) ? userId : NULL_ID),
     };
-    const file = await (await dbClient.filesCollection())
+    const file = await (await DbClient.filesCollection())
       .findOne(fileFilter);
 
     if (!file) {
       res.status(404).json({ error: 'Not found' });
       return;
     }
-    await (await dbClient.filesCollection())
+    await (await DbClient.filesCollection())
       .updateOne(fileFilter, { $set: { isPublic: false } });
     res.status(200).json({
       id,
@@ -256,7 +256,7 @@ export default class FilesController {
     const fileFilter = {
       _id: new mongoDBCore.BSON.ObjectId(isValidId(id) ? id : NULL_ID),
     };
-    const file = await (await dbClient.filesCollection())
+    const file = await (await DbClient.filesCollection())
       .findOne(fileFilter);
 
     if (!file || (!file.isPublic && (file.userId.toString() !== userId))) {

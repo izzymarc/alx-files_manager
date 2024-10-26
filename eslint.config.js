@@ -31,7 +31,11 @@ export default [
       'no-unused-vars': [
         'warn',
         { vars: 'all', args: 'after-used', ignoreRestSiblings: true },
-      ], // Warn on unused variables
+      ],
+      'import/no-named-as-default': 'off',
+      'padded-blocks': ['off'], // Allows padding within blocks
+      'no-multiple-empty-lines': ['error', { max: 2 }], // Allows up to 2 consecutive blank lines
+      'no-trailing-spaces': 'off',
       
 
       // Best Practices
